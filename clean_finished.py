@@ -5,6 +5,6 @@ output = 'clean_finish.json'
 
 completed_list = []
 for quest in get_data_from_json(source):
-    completed_list.append(quest['tests'][0])
+    completed_list.append(quest['test'])
 
 dump_to_json(output, completed_list)
