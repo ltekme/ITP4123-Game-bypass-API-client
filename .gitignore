@@ -1,5 +1,4 @@
-**.json
-**.config
-latest_log.txt
-**__pycache__
-**.pyc
+*
+
+!/.config.template
+!**/*.py
