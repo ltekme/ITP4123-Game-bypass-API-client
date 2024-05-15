@@ -60,7 +60,7 @@ def main(quests_file: str, ignore_file: str , finish_file: str, api_key: str = N
     if not os.path.exists(ignore_file):
         dump_to_json(quests_file, [])
 
-    quests, completed_quests = get_data_from_json(quests_file)
+    quests = get_data_from_json(quests_file)
     completed_quests = get_data_from_json(finish_file)
     ignore_quests = get_data_from_json(ignore_file)
 
