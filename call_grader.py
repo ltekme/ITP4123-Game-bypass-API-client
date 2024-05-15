@@ -56,9 +56,9 @@ def main(quests_file: str, ignore_file: str , finish_file: str, api_key: str = N
     if not os.path.exists(quests_file):
         dump_to_json(quests_file, _get_unfinished_quests(api_key))
     if not os.path.exists(finish_file):
-        dump_to_json(quests_file, _get_finished_quests(api_key))
+        dump_to_json(finish_file, _get_finished_quests(api_key))
     if not os.path.exists(ignore_file):
-        dump_to_json(quests_file, [])
+        dump_to_json(ignore_file, [])
 
     quests = get_data_from_json(quests_file)
     completed_quests = get_data_from_json(finish_file)
