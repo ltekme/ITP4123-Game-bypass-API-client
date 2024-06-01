@@ -3,10 +3,9 @@ import json
 import os
 from urllib.parse import quote_plus
 from dotenv import dotenv_values
-from _modules import dump_to_json, get_data_from_json
+from _modules import dump_to_json, get_data_from_json, HEADERS
 
 API_URL = 'https://kp4du9furk.execute-api.us-east-1.amazonaws.com/api'
-
 
 def get_api_key(api_key: str = None):
     if api_key is None:
@@ -18,7 +17,8 @@ def get_api_key(api_key: str = None):
 
 def _get_finished_quests(api_key: str = None):
     api_response = requests.get(
-        f'{API_URL}/marks?api_key={quote_plus(get_api_key(api_key))+"&"}')
+        f'{API_URL}/marks?api_key={quote_plus(get_api_key(api_key))+"&"}',
+        headers=HEADERS)
     if api_response.status_code != 200:
         raise Exception(f"Error: {api_response.status_code}")
     return json.loads(str(api_response.content.decode('utf-8')))
@@ -27,7 +27,8 @@ def _get_finished_quests(api_key: str = None):
 def _get_unfinished_quests(api_key: str = None):
     while True:
         api_response = requests.get(
-            f'{API_URL}/game?api_key={quote_plus(get_api_key(api_key))+"&"}')
+            f'{API_URL}/game?api_key={quote_plus(get_api_key(api_key))+"&"}',
+            headers=HEADERS)
         if api_response.status_code != 200:
             raise Exception(f"Error: {api_response.status_code}")
         data = api_response.content.decode('utf-8')
@@ -38,7 +39,8 @@ def _get_unfinished_quests(api_key: str = None):
 
 def _get_test_resault(filter: str, api_key: str = None):
     api_response = requests.get(
-        f'{API_URL}/grader', params={'api_key': get_api_key(api_key), "filter": filter})
+        f'{API_URL}/grader', params={'api_key': get_api_key(api_key), "filter": filter},
+        headers=HEADERS)
     if api_response.status_code != 200:
         raise Exception(f"Error: {api_response.status_code}")
     resault = json.loads(str(api_response.content.decode('utf-8')))
@@ -68,7 +70,7 @@ def main(quests_file: str, ignore_file: str , finish_file: str, api_key: str = N
     ignore_tests = [test['tests'][0] for test in ignore_quests]
 
     # Filters
-    # quests = [q for q in quests if q['tests'][0] not in finished_tests]  # filter finished
+    quests = [q for q in quests if q['tests'][0] not in finished_tests]  # filter finished
     quests = [q for q in quests if q['tests'][0] not in ignore_tests]  # filter ignored
 
     for quest in quests:
