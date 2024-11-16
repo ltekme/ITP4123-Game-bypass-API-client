@@ -1,6 +1,6 @@
 from _modules import get_data_from_json
 
-quests = get_data_from_json('quests.json')
+quests = get_data_from_json('./data/quests.json')
 
 if __name__ == "__main__":
     for i in quests:

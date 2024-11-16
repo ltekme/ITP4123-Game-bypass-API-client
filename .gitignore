@@ -2,3 +2,4 @@
 
 !/.config.template
 !**/*.py
+!*.md

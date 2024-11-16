@@ -1,4 +1,9 @@
 import json
+import os
+import requests
+
+from dotenv import load_dotenv
+load_dotenv()
 
 
 class Quest:
@@ -31,4 +36,26 @@ def get_data_from_json(file: str):
 
 
 HEADERS = {
-    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
+    "accept": "*/*",
+    "accept-language": "en-US,en;q=0.9,zh-TW;q=0.8,zh;q=0.7",
+    "priority": "u=1, i",
+    "sec-ch-ua": "\"Google Chrome\";v=\"131\", \"Chromium\";v=\"131\", \"Not_A Brand\";v=\"24\"",
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "sec-fetch-dest": "empty",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-site": "cross-site",
+    "x-api-key": os.environ.get("API_KEY"),
+    "Referrer-Policy": "strict-origin-when-cross-origin",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
+}
+
+API_URL = os.environ.get("API_URL")
+
+
+def call_api(path, params={}) -> requests.Response:
+    return requests.get(
+        url=f'{API_URL}/{path}',
+        params=params,
+        headers=HEADERS
+    )
