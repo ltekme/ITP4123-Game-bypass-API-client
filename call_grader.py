@@ -77,7 +77,7 @@ def main(quests_file: str, ignore_file: str, finish_file: str, log_dir: str):
         print(f"Testing {quest['name']}")
         resault = _get_test_resault(filter=quest['filter'], logdir=log_dir)
         if resault[0]:
-            dump_to_json(finish_file, _get_finished_quests(api_key))
+            dump_to_json(finish_file, _get_finished_quests())
         else:
             lines = '*' * 100
             space = '\n' * 2
