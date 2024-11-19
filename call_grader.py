@@ -73,17 +73,17 @@ def main(quests_file: str, ignore_file: str, finish_file: str, log_dir: str):
     quests = [q for q in quests if q['tests'][0]
               not in ignore_tests]  # filter ignored
 
-    for quest in quests:
-        print(f"Testing {quest['name']}")
-        resault = _get_test_resault(filter=quest['filter'], logdir=log_dir)
-        if resault[0]:
-            dump_to_json(finish_file, _get_finished_quests())
-        else:
-            lines = '*' * 100
-            space = '\n' * 2
-            print(f"{lines}{space}{resault[1]}{space}{lines}{
-                  space}{quest['instruction']}{space}{lines}")
-            break
+    print(f"Testing {quests[0]['name']}")
+    resault = _get_test_resault(filter=quests[0]['filter'], logdir=log_dir)
+    lines = '*' * 100
+    space = '\n' * 2
+    if resault[0]:
+        dump_to_json(finish_file, _get_finished_quests())
+        print(f"{lines}{space}{quests[0]} Passed{space}{lines}{
+            space}{quests[1]['name']} instruction{space}{quests[1]['instruction']}{space}{lines}")
+    else:
+        print(f"{lines}{space}{resault[1]}{space}{lines}{
+            space}{quests[0]['instruction']}{space}{lines}")
 
 
 if __name__ == '__main__':
