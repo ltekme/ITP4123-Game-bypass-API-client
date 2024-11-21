@@ -10,3 +10,8 @@ just run call_grader.py. To skip a task, copy the task json object from quest.js
 get_instruction.py will print out all the tasks
 
 finished task will be added to finished.json
+
+
+# Ingore api finished test API
+
+run call_grader_local.py

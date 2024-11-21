@@ -14,13 +14,6 @@ def get_api_key():
     return api_key
 
 
-def _get_finished_quests():
-    api_response = call_api(path="getpassedtest")
-    if api_response.status_code != 200:
-        raise Exception(f"Error: {api_response.status_code}")
-    return json.loads(str(api_response.content.decode('utf-8')))
-
-
 def _get_unfinished_quests():
     while True:
         api_response = call_api(path="game?mode")
@@ -59,7 +52,7 @@ def main(quests_file: str, ignore_file: str, finish_file: str, log_dir: str):
     if not os.path.exists(quests_file):
         dump_to_json(quests_file, _get_unfinished_quests())
     if not os.path.exists(finish_file):
-        dump_to_json(finish_file, _get_finished_quests())
+        dump_to_json(finish_file, [])
     if not os.path.exists(ignore_file):
         dump_to_json(ignore_file, [])
 
@@ -67,7 +60,7 @@ def main(quests_file: str, ignore_file: str, finish_file: str, log_dir: str):
     completed_quests = get_data_from_json(finish_file)
     ignore_quests = get_data_from_json(ignore_file)
 
-    finished_tests = [test['test'] for test in completed_quests]
+    finished_tests = [test['tests'][0] for test in completed_quests]
     ignore_tests = [test['tests'][0] for test in ignore_quests]
 
     # Filters
@@ -81,19 +74,20 @@ def main(quests_file: str, ignore_file: str, finish_file: str, log_dir: str):
     lines = '*' * 100
     space = '\n' * 2
     if resault[0]:
-        dump_to_json(finish_file, _get_finished_quests())
-        print(f"{lines}{space}{quests[0]} Passed{space}{lines}{
-            space}{quests[1]['name']} instruction{space}{quests[1]['instruction']}{space}{lines}")
+        completed_quests.append(quests[0])
+        dump_to_json(finish_file, completed_quests)
+        print(f"{lines}{space}{quests[0]} Passed{space}{lines}{space}{
+              quests[1]['name']} instruction{space}{quests[1]['instruction']}{space}{lines}")
     else:
         print(f"{lines}{space}{resault[1]}{space}{lines}{
-            space}{quests[0]['instruction']}{space}{lines}")
+              space}{quests[0]['instruction']}{space}{lines}")
 
 
 if __name__ == '__main__':
     configs = {
-        'finish_file': './data/finished.json',
-        'quests_file': './data/quests.json',
-        'ignore_file': './data/ignore.json',
-        'log_dir': "./data"
+        'finish_file': './data_local/finished.json',
+        'quests_file': './data_local/quests.json',
+        'ignore_file': './data_local/ignore.json',
+        'log_dir': "./data_local"
     }
     main(**configs)
